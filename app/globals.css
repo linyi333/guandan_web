@@ -643,7 +643,7 @@ button, input {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 760px) and (orientation: portrait) {
   .page-shell {
     padding: 8px;
     gap: 8px;
@@ -656,5 +656,101 @@ button, input {
 
   .team-card {
     min-height: 0;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .page-shell {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .top-bar {
+    padding: 8px 10px;
+    border-radius: 16px;
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .board-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .team-card {
+    grid-template-columns: 1fr 56px;
+    gap: 7px;
+    padding: 9px;
+    border-radius: 18px;
+  }
+
+  .level-panel {
+    min-height: 100px;
+    padding: 7px 9px;
+    border-radius: 14px;
+  }
+
+  .level-main {
+    font-size: clamp(2.2rem, 9vh, 3.2rem);
+  }
+
+  .level-value.senior .level-main {
+    font-size: clamp(2.5rem, 10vh, 3.6rem);
+  }
+
+  .level-sub {
+    font-size: clamp(0.95rem, 3.2vh, 1.2rem);
+  }
+
+  .icon-action {
+    font-size: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .wins-row {
+    min-height: 40px;
+    padding: 5px 7px;
+    border-radius: 13px;
+  }
+
+  .wins-label {
+    font-size: 0.78rem;
+  }
+
+  .wins-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  .wins-value {
+    font-size: 1.1rem;
+    width: 22px;
+  }
+
+  .bottom-bar {
+    padding: 7px;
+    border-radius: 16px;
+  }
+
+  .danger-btn {
+    width: 84px;
+    min-height: 42px;
+  }
+
+  .primary-btn,
+  .disabled-pill {
+    min-width: 136px;
+    min-height: 42px;
+    font-size: 0.95rem;
   }
 }
