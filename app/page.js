@@ -9,6 +9,7 @@ const DEFAULT_STATE = {
   lang: 'zh',
   seniorMode: false,
   soundOn: true,
+  keepAwake: true,
   teamA: { name: '', levelIndex: 0, wins: 0 },
   teamB: { name: '', levelIndex: 0, wins: 0 },
   stageTeam: null,
@@ -32,6 +33,7 @@ const TEXT = {
     senior: '大字',
     lang: '中文',
     soundOn: '声音',
+    keepAwake: '常亮',
     to2Hint: '到2级后可切换',
     editHint: '点按改名，长按恢复默认',
   },
@@ -52,6 +54,7 @@ const TEXT = {
     senior: 'A+',
     lang: 'EN',
     soundOn: 'Sound',
+    keepAwake: 'Awake',
     to2Hint: 'Available after level 2',
     editHint: 'Tap rename, hold reset',
   },
@@ -75,6 +78,7 @@ function normalizeState(input) {
     lang: s.lang === 'en' ? 'en' : 'zh',
     seniorMode: !!s.seniorMode,
     soundOn: s.soundOn !== false,
+    keepAwake: s.keepAwake !== false,
     teamA,
     teamB,
     stageTeam,
@@ -250,6 +254,7 @@ export default function Page() {
   const [state, setState] = useState(DEFAULT_STATE);
   const [toast, setToast] = useState('');
   const soundRef = useRef(null);
+  const wakeLockRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -261,6 +266,46 @@ export default function Page() {
   useEffect(() => {
     soundRef.current = createSynthPlayer();
   }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const requestWakeLock = async () => {
+      if (!state.keepAwake) return;
+      if (!('wakeLock' in navigator)) return;
+      try {
+        wakeLockRef.current = await navigator.wakeLock.request('screen');
+        wakeLockRef.current?.addEventListener?.('release', () => {
+          wakeLockRef.current = null;
+        });
+      } catch {}
+    };
+
+    const releaseWakeLock = async () => {
+      try {
+        await wakeLockRef.current?.release?.();
+      } catch {}
+      wakeLockRef.current = null;
+    };
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    };
+
+    if (state.keepAwake) {
+      requestWakeLock();
+    } else {
+      releaseWakeLock();
+    }
+
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      releaseWakeLock();
+    };
+  }, [state.keepAwake]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -406,6 +451,14 @@ export default function Page() {
         </div>
 
         <div className="header-actions">
+          <button
+            className={`chip ${state.keepAwake ? 'active' : ''}`}
+            onClick={() => update((p) => ({ ...p, keepAwake: !p.keepAwake }))}
+            title={labels.keepAwake}
+            aria-label={labels.keepAwake}
+          >
+            {state.keepAwake ? '☀︎' : '🌙'}
+          </button>
           <button
             className={`chip ${state.soundOn ? 'active' : ''}`}
             onClick={() => update((p) => ({ ...p, soundOn: !p.soundOn }))}

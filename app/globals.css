@@ -354,15 +354,15 @@ button, input {
 }
 
 .level-value.senior .level-main {
-  font-size: clamp(4rem, 13vh, 6.4rem);
+  font-size: clamp(6.2rem, 22vh, 10rem);
 }
 
 .level-main {
-  font-size: clamp(3.2rem, 10vh, 5.2rem);
+  font-size: clamp(5rem, 17vh, 8.2rem);
 }
 
 .level-sub {
-  font-size: clamp(1.4rem, 4vh, 2.1rem);
+  font-size: clamp(1.9rem, 6vh, 3rem);
   margin-left: 2px;
   align-self: flex-start;
   transform: translateY(0.95em);
@@ -579,15 +579,15 @@ button, input {
   }
 
   .level-main {
-    font-size: clamp(2.5rem, 7.2vh, 4rem);
+    font-size: clamp(3.8rem, 12vh, 5.8rem);
   }
 
   .level-value.senior .level-main {
-    font-size: clamp(2.9rem, 8.8vh, 4.6rem);
+    font-size: clamp(4.4rem, 14vh, 6.4rem);
   }
 
   .level-sub {
-    font-size: clamp(1rem, 2.9vh, 1.4rem);
+    font-size: clamp(1.4rem, 4.2vh, 1.95rem);
   }
 
   .icon-action {
@@ -699,15 +699,15 @@ button, input {
   }
 
   .level-main {
-    font-size: clamp(2.2rem, 9vh, 3.2rem);
+    font-size: clamp(3.1rem, 13.5vh, 4.6rem);
   }
 
   .level-value.senior .level-main {
-    font-size: clamp(2.5rem, 10vh, 3.6rem);
+    font-size: clamp(3.6rem, 15.5vh, 5.2rem);
   }
 
   .level-sub {
-    font-size: clamp(0.95rem, 3.2vh, 1.2rem);
+    font-size: clamp(1.2rem, 4.5vh, 1.55rem);
   }
 
   .icon-action {
