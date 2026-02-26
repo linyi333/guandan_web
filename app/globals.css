@@ -26,6 +26,7 @@ html, body {
   background: #050c16;
   color: var(--text);
   font-family: "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  overflow: hidden;
 }
 
 button, input {
@@ -34,6 +35,7 @@ button, input {
 
 .page-shell {
   position: relative;
+  height: 100dvh;
   min-height: 100dvh;
   padding: 12px;
   background:
@@ -43,6 +45,7 @@ button, input {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 10px;
+  overflow: hidden;
 }
 
 .ambient {
@@ -158,7 +161,7 @@ button, input {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 72px;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 10px 10px;
   min-height: 0;
   padding: 12px;
@@ -374,6 +377,7 @@ button, input {
   display: grid;
   grid-template-rows: 1fr 1fr;
   gap: 10px;
+  min-height: 0;
 }
 
 .icon-action {
@@ -384,6 +388,12 @@ button, input {
   font-weight: 800;
   cursor: pointer;
   transition: transform .08s ease;
+  line-height: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .icon-action:active {
@@ -660,97 +670,180 @@ button, input {
 }
 
 @media (max-width: 900px) and (orientation: landscape) {
+  html, body {
+    overflow: hidden;
+  }
+
   .page-shell {
-    padding: 8px;
-    gap: 8px;
+    height: 100dvh;
+    min-height: 100dvh;
+    padding: 6px;
+    gap: 6px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
   }
 
   .top-bar {
-    padding: 8px 10px;
-    border-radius: 16px;
+    padding: 6px 8px;
+    border-radius: 14px;
+    gap: 8px;
   }
 
   .brand-mark {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    font-size: .95rem;
   }
 
   .brand-title {
-    font-size: 1rem;
+    font-size: .9rem;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .chip {
+    height: 30px;
+    min-width: 38px;
+    padding: 0 8px;
+    border-radius: 10px;
+    font-size: .82rem;
   }
 
   .board-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
+    min-height: 0;
   }
 
   .team-card {
-    grid-template-columns: 1fr 56px;
-    gap: 7px;
-    padding: 9px;
-    border-radius: 18px;
+    grid-template-columns: 1fr 50px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 7px;
+    border-radius: 15px;
+    min-height: 0;
+  }
+
+  .team-header {
+    gap: 6px;
+  }
+
+  .team-mark {
+    width: 8px;
+    height: 22px;
+    border-radius: 6px;
+  }
+
+  .team-title-wrap {
+    gap: 6px;
+  }
+
+  .team-name {
+    font-size: 1.1rem;
+  }
+
+  .team-edit {
+    font-size: .72rem;
+  }
+
+  .stage-badge {
+    font-size: .62rem;
+    padding: 2px 6px;
+  }
+
+  .stage-top-strip {
+    right: 8px;
+    min-width: 50px;
+    height: 16px;
+    font-size: .55rem;
+    border-radius: 0 0 8px 8px;
+    padding: 0 6px;
   }
 
   .level-panel {
-    min-height: 100px;
-    padding: 7px 9px;
-    border-radius: 14px;
-  }
-
-  .level-main {
-    font-size: clamp(3.1rem, 13.5vh, 4.6rem);
-  }
-
-  .level-value.senior .level-main {
-    font-size: clamp(3.6rem, 15.5vh, 5.2rem);
-  }
-
-  .level-sub {
-    font-size: clamp(1.2rem, 4.5vh, 1.55rem);
-  }
-
-  .icon-action {
-    font-size: 1.2rem;
+    min-height: 0;
+    height: 100%;
+    padding: 5px 7px;
     border-radius: 12px;
   }
 
+  .level-label {
+    font-size: .66rem;
+  }
+
+  .level-main {
+    font-size: clamp(4.1rem, 21vh, 6.4rem);
+  }
+
+  .level-value.senior .level-main {
+    font-size: clamp(4.8rem, 25vh, 7.2rem);
+  }
+
+  .level-sub {
+    font-size: clamp(1.5rem, 7.2vh, 2.25rem);
+  }
+
+  .level-side-actions {
+    gap: 6px;
+  }
+
+  .icon-action {
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
   .wins-row {
-    min-height: 40px;
-    padding: 5px 7px;
-    border-radius: 13px;
+    min-height: 30px;
+    padding: 3px 5px;
+    border-radius: 10px;
+    gap: 6px;
   }
 
   .wins-label {
-    font-size: 0.78rem;
+    font-size: 0.62rem;
   }
 
   .wins-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 1rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    font-size: .9rem;
   }
 
   .wins-value {
-    font-size: 1.1rem;
-    width: 22px;
+    font-size: .95rem;
+    width: 18px;
   }
 
   .bottom-bar {
-    padding: 7px;
-    border-radius: 16px;
+    padding: 5px;
+    border-radius: 14px;
+    gap: 6px;
   }
 
   .danger-btn {
-    width: 84px;
-    min-height: 42px;
+    width: 72px;
+    min-height: 34px;
+    border-radius: 12px;
+    font-size: .78rem;
+  }
+
+  .danger-btn small {
+    font-size: .55rem;
   }
 
   .primary-btn,
   .disabled-pill {
-    min-width: 136px;
-    min-height: 42px;
-    font-size: 0.95rem;
+    min-width: 120px;
+    min-height: 34px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    padding: 0 10px;
   }
 }
