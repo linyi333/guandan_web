@@ -343,32 +343,43 @@ button, input {
 
 .level-label {
   color: var(--muted);
-  font-size: .9rem;
+  font-size: .72rem;
   font-weight: 600;
+  line-height: 1;
 }
 
 .level-value {
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
-  font-weight: 800;
+  line-height: .86;
+  font-weight: 900;
   color: #fff;
+  min-height: 84%;
+  overflow: hidden;
+  text-shadow:
+    0 0 1px rgba(255,255,255,.9),
+    0 2px 10px rgba(0,0,0,.25);
 }
 
 .level-value.senior .level-main {
-  font-size: clamp(6.2rem, 22vh, 10rem);
+  font-size: clamp(10.2rem, 38vh, 16.8rem);
 }
 
 .level-main {
-  font-size: clamp(5rem, 17vh, 8.2rem);
+  font-size: clamp(8.8rem, 33vh, 14.5rem);
+  font-family: "Arial Black", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
 }
 
 .level-sub {
-  font-size: clamp(1.9rem, 6vh, 3rem);
-  margin-left: 2px;
+  font-size: clamp(3.2rem, 12vh, 5.2rem);
+  margin-left: 3px;
   align-self: flex-start;
   transform: translateY(0.95em);
+  font-family: "Arial Black", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", sans-serif;
+  font-weight: 900;
 }
 
 .level-side-actions {
@@ -589,15 +600,15 @@ button, input {
   }
 
   .level-main {
-    font-size: clamp(3.8rem, 12vh, 5.8rem);
+    font-size: clamp(5.5rem, 20vh, 8.8rem);
   }
 
   .level-value.senior .level-main {
-    font-size: clamp(4.4rem, 14vh, 6.4rem);
+    font-size: clamp(6.5rem, 23vh, 10.2rem);
   }
 
   .level-sub {
-    font-size: clamp(1.4rem, 4.2vh, 1.95rem);
+    font-size: clamp(2rem, 7vh, 3rem);
   }
 
   .icon-action {
@@ -774,19 +785,19 @@ button, input {
   }
 
   .level-label {
-    font-size: .66rem;
+    font-size: .58rem;
   }
 
   .level-main {
-    font-size: clamp(4.1rem, 21vh, 6.4rem);
+    font-size: clamp(7.8rem, 39vh, 12.6rem);
   }
 
   .level-value.senior .level-main {
-    font-size: clamp(4.8rem, 25vh, 7.2rem);
+    font-size: clamp(9rem, 44vh, 14.2rem);
   }
 
   .level-sub {
-    font-size: clamp(1.5rem, 7.2vh, 2.25rem);
+    font-size: clamp(2.8rem, 14vh, 4.8rem);
   }
 
   .level-side-actions {
