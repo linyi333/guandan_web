@@ -34,6 +34,10 @@ const TEXT = {
     lang: '中文',
     soundOn: '声音',
     keepAwake: '常亮',
+    fullscreen: '全屏',
+    fullscreenFail: '当前浏览器不支持全屏',
+    immersive: '沉浸',
+    exitImmersive: '退出沉浸',
     to2Hint: '到2级后可切换',
     editHint: '点按改名，长按恢复默认',
   },
@@ -55,6 +59,10 @@ const TEXT = {
     lang: 'EN',
     soundOn: 'Sound',
     keepAwake: 'Awake',
+    fullscreen: 'Fullscreen',
+    fullscreenFail: 'Fullscreen is not supported in this browser',
+    immersive: 'Immersive',
+    exitImmersive: 'Exit Immersive',
     to2Hint: 'Available after level 2',
     editHint: 'Tap rename, hold reset',
   },
@@ -253,6 +261,9 @@ function TeamCard({
 export default function Page() {
   const [state, setState] = useState(DEFAULT_STATE);
   const [toast, setToast] = useState('');
+  const [canFullscreen, setCanFullscreen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [immersive, setImmersive] = useState(false);
   const soundRef = useRef(null);
   const wakeLockRef = useRef(null);
 
@@ -319,6 +330,50 @@ export default function Page() {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     });
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    const root = document.documentElement;
+    const getVisibleHeight = () => window.visualViewport?.height ?? window.innerHeight;
+    const getVisibleWidth = () => window.visualViewport?.width ?? window.innerWidth;
+    const applyViewportMetrics = () => {
+      root.style.setProperty('--app-height', `${Math.round(getVisibleHeight())}px`);
+      root.style.setProperty('--app-width', `${Math.round(getVisibleWidth())}px`);
+    };
+
+    applyViewportMetrics();
+    window.addEventListener('resize', applyViewportMetrics);
+    window.addEventListener('orientationchange', applyViewportMetrics);
+    window.visualViewport?.addEventListener('resize', applyViewportMetrics);
+    window.visualViewport?.addEventListener('scroll', applyViewportMetrics);
+
+    return () => {
+      window.removeEventListener('resize', applyViewportMetrics);
+      window.removeEventListener('orientationchange', applyViewportMetrics);
+      window.visualViewport?.removeEventListener('resize', applyViewportMetrics);
+      window.visualViewport?.removeEventListener('scroll', applyViewportMetrics);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const docEl = document.documentElement;
+    const supported = !!(docEl.requestFullscreen || docEl.webkitRequestFullscreen);
+    setCanFullscreen(supported);
+
+    const sync = () => {
+      const active = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      setIsFullscreen(active);
+      if (!active) setImmersive(false);
+    };
+    sync();
+    document.addEventListener('fullscreenchange', sync);
+    document.addEventListener('webkitfullscreenchange', sync);
+    return () => {
+      document.removeEventListener('fullscreenchange', sync);
+      document.removeEventListener('webkitfullscreenchange', sync);
+    };
   }, []);
 
   useEffect(() => {
@@ -435,11 +490,53 @@ export default function Page() {
     650,
   );
 
+  const toggleFullscreen = async () => {
+    if (typeof document === 'undefined') return;
+    try {
+      if (!isFullscreen) {
+        const request = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+        if (!request) throw new Error('unsupported');
+        await request.call(document.documentElement);
+      } else {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (!exit) throw new Error('unsupported');
+        await exit.call(document);
+      }
+      return true;
+    } catch {
+      setToast(labels.fullscreenFail);
+      return false;
+    }
+  };
+
+  const enterImmersive = async () => {
+    if (!canFullscreen) {
+      setToast(labels.fullscreenFail);
+      return;
+    }
+    setImmersive(true);
+    if (!isFullscreen) {
+      const ok = await toggleFullscreen();
+      if (!ok) setImmersive(false);
+    }
+  };
+
+  const exitImmersive = async () => {
+    setImmersive(false);
+    if (isFullscreen) await toggleFullscreen();
+  };
+
   return (
-    <main className="page-shell">
+    <main className={`page-shell ${immersive ? 'immersive' : ''}`}>
       <div className="ambient ambient-a" />
       <div className="ambient ambient-b" />
       <div className="ambient ambient-c" />
+
+      {immersive ? (
+        <button className="immersive-close" onClick={exitImmersive} aria-label={labels.exitImmersive} title={labels.exitImmersive}>
+          ×
+        </button>
+      ) : null}
 
       <header className="top-bar">
         <div className="brand">
@@ -467,6 +564,16 @@ export default function Page() {
           >
             {state.soundOn ? '🔊' : '🔇'}
           </button>
+          {canFullscreen ? (
+            <button
+              className={`chip ${immersive ? 'active' : ''}`}
+              onClick={enterImmersive}
+              title={labels.immersive}
+              aria-label={labels.immersive}
+            >
+              {immersive ? '⤢' : '⛶'}
+            </button>
+          ) : null}
           <button className={`chip ${state.seniorMode ? 'active' : ''}`} onClick={() => update((p) => ({ ...p, seniorMode: !p.seniorMode }))}>
             {labels.senior}
           </button>
